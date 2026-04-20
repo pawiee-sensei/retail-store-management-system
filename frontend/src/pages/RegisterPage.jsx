@@ -1,5 +1,6 @@
 import { useState } from "react";
-import Header from "../components/layout/Header";
+import Header from "../components/layout/Header"; 
+import { registerUser } from "../services/auth.js";
 
 function RegisterPage (){
     const [formData, setFormData] = useState({
@@ -7,6 +8,8 @@ function RegisterPage (){
         email: '',
         password: '',
     });
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -18,9 +21,24 @@ function RegisterPage (){
         }));
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log('Register data', formData);
+        setMessage('');
+        setError('');
+
+        try {
+            const data =  await registerUser(formData);
+            console.log('Register success', data);
+            setMessage('Registration successful.');
+            setFormData({
+                username: '',
+                email: '',
+                password: '',
+            });
+        } catch (error) {
+            console.error('Register failed', error.message);
+            setError(error.message);
+        }
     };
 
 
@@ -35,6 +53,8 @@ function RegisterPage (){
             <div className="auth-card">
                 <h1>Register</h1>
                 <p>Sign up to access your retail dashboard</p>
+                {message && <p>{message}</p>}
+                {error && <p>{error}</p>}
 
                 <form onSubmit={handleSubmit} className="auth-form">
                     <label htmlFor="username">Username</label>
