@@ -3,11 +3,11 @@ const ProductList = ({ products }) => {
   
     return (
     <ul>
-        {products.map((p) => {
+        {products.map((p) => (
             <li key={p.id}>
                 {p.name} - ${p.price} - {p.stock}   
             </li>
-        })}
+        ))}
     </ul>
     ); 
 };

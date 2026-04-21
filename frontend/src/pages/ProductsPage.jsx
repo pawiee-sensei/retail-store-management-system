@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {getProducts} from "../services/products.js";
+import {getProducts} from "../services/product.js";
 import ProductList from "../components/retail/ProductList.jsx";
 
 const ProductPage = () => {
@@ -32,3 +32,5 @@ const ProductPage = () => {
     </div>
     ); 
 };
+
+export default ProductPage;
