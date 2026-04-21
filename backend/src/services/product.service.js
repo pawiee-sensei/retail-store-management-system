@@ -21,3 +21,19 @@ export const getProducts = async () => {
     return rows;
 };
 
+export const updateProducts = async (id, name, price, stock, category) => {
+    if (!id || !name || !price || !stock || !category) {
+      throw new Error('All fields are required');
+    }
+  
+    const [result] = await pool.query('UPDATE products SET name = ?, price = ?, stock = ?, category = ? WHERE id = ?',
+        [name, price, stock, category, id]);
+    return {
+      id,
+      name,
+      price,
+      stock,
+      category,
+    };
+};
+

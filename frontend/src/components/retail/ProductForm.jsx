@@ -1,12 +1,19 @@
 import { useState } from "react";
 import { createProduct } from "../../services/product.js";
 
-const ProductForm = ({ onClose, onSuccess }) => {
+//=============
+// USE STATE
+//=============
+const ProductForm = ({ onClose, onSuccess, initialData }) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
   const [category, setCategory] = useState("");
 
+  
+//================
+// HANDLE SUBMIT
+//================
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -31,53 +38,62 @@ const ProductForm = ({ onClose, onSuccess }) => {
    
 
   return (
+    <div className = "modal-overlay">
+      <div className="modal">
+
     <form onSubmit={handleSubmit} className="product-form">
-      <h3 className="product-form__title">Add Product</h3>
+      <h3 className="product-form__title">
+        {initialData ? "Edit Product" : "Add Product"}
+      </h3>
 
       <div className="product-form__field">
         <label className="product-form__label">Product Name</label>
-        <input
-          className="product-form__input"
+        <input className="product-form__input"
+
           placeholder="Enter product name"
           value={name}
           onChange={(e) => setName(e.target.value)}
+
           required
         />
       </div>
 
       <div className="product-form__field">
         <label className="product-form__label">Price</label>
-        <input
-          className="product-form__input"
+        <input className="product-form__input"
+
           placeholder="Enter price"
           type="number"
           min="0"
           step="0.01"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
+
           required
         />
       </div>
 
       <div className="product-form__field">
         <label className="product-form__label">Stock</label>
-        <input
-          className="product-form__input"
+        <input className="product-form__input"
+
           placeholder="Enter stock quantity"
           type="number"
           min="0"
           value={stock}
           onChange={(e) => setStock(e.target.value)}
+
           required
         />
       </div>
 
       <div className="product-form__field">
         <label className="product-form__label">Category</label>
-        <select
-          className="product-form__input"
+        <select className="product-form__input"
+
           value={category}
           onChange={(e) => setCategory(e.target.value)}
+          
           required
         >
           <option value="" disabled>
@@ -92,8 +108,11 @@ const ProductForm = ({ onClose, onSuccess }) => {
       <div className="product-form__actions">
         <button type="submit" className="product-form__button product-form__button--primary">Save</button>
         <button type="button" className="product-form__button product-form__button--secondary" onClick={onClose}>Cancel</button>
-      </div>
-    </form>
+       </div>
+     </form>
+    </div>
+  </div>
+
   );
 };
 

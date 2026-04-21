@@ -1,4 +1,5 @@
-import { createProducts, getProducts } from "../services/product.service.js";
+import { createProducts, getProducts, updateProducts } from "../services/product.service.js";
+
 
 export const createProductHandler = async (req, res) => {
     try {
@@ -18,3 +19,15 @@ export const getProductHandler = async (_req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+export const updateProductHandler = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, price, stock, category } = req.body;
+
+        const updated = await updateProducts(id, name, price, stock, category);
+        res.status(200).json(updated);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
