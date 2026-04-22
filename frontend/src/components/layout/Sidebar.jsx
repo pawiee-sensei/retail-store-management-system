@@ -44,6 +44,19 @@ const Sidebar = ({ onLogout }) => {
                 >
                     Products
                 </NavLink>
+
+                <NavLink
+                    to="/POS"
+                    className={({ isActive }) =>
+                        isActive
+                            ? "sidebar__link sidebar__link--active"
+                            : "sidebar__link"
+                    }
+                >
+                    POS
+                </NavLink>
+
+                
             </nav>
 
             <div className="sidebar__footer">

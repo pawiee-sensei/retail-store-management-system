@@ -294,6 +294,37 @@ a {
   transform: translateY(0);
 }
 
+.products-page__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.products-page__search-wrap {
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
+}
+
+.products-page__search-input {
+  width: min(100%, 420px);
+  padding: 0.9rem 1rem;
+  border: 1px solid #cfe1e8;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 0.95rem;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.products-page__search-input:focus {
+  outline: none;
+  border-color: #22d3ee;
+  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.12);
+}
+
 .products-page__tabs {
   display: flex;
   flex-wrap: wrap;
@@ -401,6 +432,56 @@ a {
   transform: translateY(-1px);
 }
 
+.products-page__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.products-page__pagination-text {
+  margin: 0;
+  color: #5b6472;
+  font-size: 0.92rem;
+}
+
+.products-page__pagination-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.products-page__page-button {
+  padding: 0.7rem 1rem;
+  border: 1px solid #d5e5eb;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.products-page__page-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: #f0fdff;
+  border-color: #9ee4ef;
+}
+
+.products-page__page-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.products-page__page-indicator {
+  min-width: 110px;
+  text-align: center;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #35515a;
+}
+
 .product-form {
   width: 100%;
   max-width: 420px;
@@ -494,6 +575,19 @@ a {
     width: 100%;
   }
 
+  .products-page__toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .products-page__search-wrap {
+    width: 100%;
+  }
+
+  .products-page__search-input {
+    width: 100%;
+  }
+
   .products-page__tabs {
     gap: 0.6rem;
   }
@@ -505,6 +599,15 @@ a {
 
   .product-table {
     overflow-x: auto;
+  }
+
+  .products-page__pagination {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .products-page__pagination-actions {
+    justify-content: space-between;
   }
 }
 
@@ -528,4 +631,97 @@ a {
   padding: 20px;
   border-radius: 8px;
   width: 350px;
+}
+
+.pos-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pos-page__hero {
+  padding: 1.4rem 1.5rem;
+  border: 1px solid #dbe4ea;
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at top right, rgba(34, 211, 238, 0.14), transparent 35%),
+    linear-gradient(135deg, rgba(132, 204, 22, 0.12), rgba(255, 255, 255, 0.95));
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.06);
+}
+
+.pos-page__eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0f766e;
+}
+
+.pos-page__title {
+  margin: 0;
+  font-size: clamp(1.8rem, 2vw, 2.4rem);
+  color: #111827;
+}
+
+.pos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.pos-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-height: 180px;
+  padding: 1rem;
+  border: 1px solid #d8e7eb;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, #ffffff, #f8fbfc);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.pos-card:hover {
+  transform: translateY(-3px);
+  border-color: #9ee4ef;
+  box-shadow: 0 18px 34px rgba(15, 23, 42, 0.1);
+}
+
+.pos-card__badge {
+  align-self: flex-start;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: #ecfeff;
+  color: #155e75;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pos-card__title {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.35;
+  color: #111827;
+}
+
+.pos-card__price {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #0f766e;
+}
+
+.pos-card__stock {
+  margin-top: auto;
+  color: #5b6472;
+  font-size: 0.86rem;
 }

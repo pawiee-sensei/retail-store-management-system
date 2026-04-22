@@ -8,9 +8,10 @@ const ProductPage = () => {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
-  const [deleteProduct, setDeleteProduct] = useState(null);
   const [activeCategory, setActiveCategory] = useState("All");
-  const [search , setSearch] = useState('');
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 10;
 
 
   const categories = [
@@ -33,6 +34,12 @@ const filteredProducts = products.filter((p) => {
   return matchesCategory && matchesSearch;
 });
 
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / rowsPerPage));
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
   const fetchProducts = async () => {
     try {
       const data = await getProducts();
@@ -50,6 +57,16 @@ const filteredProducts = products.filter((p) => {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, activeCategory]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
   if (loading) return <p>Loading...</p>;
 
   return (
@@ -61,24 +78,24 @@ const filteredProducts = products.filter((p) => {
         </div>
       </div>
 
-        <div tyle={{ display: "flex", justifyContent: "space-between", marginBottom: "10px" }}>
-           
-            <button
-                className="products-page__add-button"
-                onClick={() => setShowForm(true)}
-            >
-                Add Product
-            </button>
+      <div className="products-page__toolbar">
+        <button
+          className="products-page__add-button"
+          onClick={() => setShowForm(true)}
+        >
+          Add Product
+        </button>
 
-            <input 
-                type="text"
-                placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                style={{ width: "200px" }}
-            />
-            
+        <div className="products-page__search-wrap">
+          <input
+            className="products-page__search-input"
+            type="text"
+            placeholder="Search product name or category"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </div>
+      </div>
 
       <div className="products-page__tabs" role="tablist" aria-label="Product categories">
         {categories.map((cat) => (
@@ -112,10 +129,42 @@ const filteredProducts = products.filter((p) => {
       )}
 
       <ProductList
-            products={filteredProducts}
-            onEdit={setEditProduct}
-            onDelete={fetchProducts}
-          />
+        products={paginatedProducts}
+        onEdit={setEditProduct}
+        onDelete={fetchProducts}
+      />
+
+      <div className="products-page__pagination">
+        <p className="products-page__pagination-text">
+          Showing {filteredProducts.length === 0 ? 0 : (currentPage - 1) * rowsPerPage + 1}
+          {" "}-{" "}
+          {Math.min(currentPage * rowsPerPage, filteredProducts.length)} of {filteredProducts.length}
+        </p>
+
+        <div className="products-page__pagination-actions">
+          <button
+            type="button"
+            className="products-page__page-button"
+            onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+
+          <span className="products-page__page-indicator">
+            Page {currentPage} of {totalPages}
+          </span>
+
+          <button
+            type="button"
+            className="products-page__page-button"
+            onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

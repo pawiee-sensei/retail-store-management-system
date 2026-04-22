@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage.jsx";
 import ProductsPage from "./pages/ProductsPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
+import POSPage from "./pages/POSPage.jsx";
 
 export const router = createBrowserRouter([
     {
@@ -15,6 +16,10 @@ export const router = createBrowserRouter([
         path: "/register",
         element: <RegisterPage />,
     },
+
+            //===================
+            //      index
+            //===================
     {
         path: "/",
         element: (
@@ -23,16 +28,19 @@ export const router = createBrowserRouter([
             </ProtectedRoute>
         ),
         children: [
+
+            //===================
+            //      index
+            //===================
             {
                 index: true,
                 element: <Navigate to="/products" replace />,
             },
 
-            {
-                index: true,
-                element: <DashboardPage />,
-            },
 
+            //===================
+            //      Path
+            //===================
             {
                 path: "products",
                 element: <ProductsPage />,
@@ -41,6 +49,11 @@ export const router = createBrowserRouter([
             {
                 path: "dashboard",
                 element: <DashboardPage />,
+            },
+
+            {
+                path: "pos",
+                element: <POSPage/>,
             },
 
             
