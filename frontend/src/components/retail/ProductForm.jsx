@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { createProduct } from "../../services/product.js";
+import { useEffect } from "react";
+import { createProduct, updateProduct } from "../../services/product.js";
+
 
 //=============
 // USE STATE
@@ -10,6 +12,18 @@ const ProductForm = ({ onClose, onSuccess, initialData }) => {
   const [stock, setStock] = useState("");
   const [category, setCategory] = useState("");
 
+
+   const isEdit = Boolean(initialData); 
+
+  
+    useEffect (() => {
+      if (initialData) {
+        setName(initialData.name || "");
+        setPrice(initialData.price || "");
+        setStock(initialData.stock || "");
+        setCategory(initialData.category || "");
+      }
+    }, [initialData]);
   
 //================
 // HANDLE SUBMIT
@@ -18,18 +32,27 @@ const ProductForm = ({ onClose, onSuccess, initialData }) => {
     e.preventDefault();
 
     try {
-      await createProduct({
-        name: name.trim(),
-        price: Number(price),
-        stock: Number(stock),
-        category,
-      });
+      if (isEdit) {
+        await updateProduct(
+          initialData.id,{
+            name: name.trim(),
+            price: Number(price),
+            stock: Number(stock),
+            category,
+          });
 
-      if (onSuccess) {
-        onSuccess();
+      } else {
+        await createProduct({
+          name: name.trim(),
+          price: Number(price),
+          stock: Number(stock),
+          category,
+        });
       }
 
-      onClose();
+
+  onSuccess && onSuccess();
+  onClose();
     } catch (error) {
       console.error(error);
     }

@@ -37,3 +37,12 @@ export const updateProducts = async (id, name, price, stock, category) => {
     };
 };
 
+export const deleteProducts = async (id) => {
+    const [result] = await pool.query('DELETE FROM products WHERE id = ?', [id]);
+    if (result.affectedRows === 0) {
+      throw new Error('Product not found');
+    }
+    return {
+        message: 'Product deleted successfully'
+    };
+}

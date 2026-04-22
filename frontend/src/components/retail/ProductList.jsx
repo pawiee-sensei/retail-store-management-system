@@ -1,9 +1,25 @@
-const ProductList = ({ products, onEdit }) => {
+import { deleteProduct } from "../../services/product";
+
+
+const ProductList = ({ products, onEdit, onDelete }) => {
     if (!products.length) return <p>No products found</p>;
+
+const handleDelete = async (id) => {
+    const confirm = window.confirm('Are you sure you want to delete this product?');
+    if (!confirm) return;
+
+    try {
+        await deleteProduct(id);
+        window.location.reload();
+    } catch (error) {
+        console.error(error);
+    }
+};
   
     return (
-        <table border="1" cellPadding="10" style={{ width: "100%" }}>
-            <thread>
+        <div className="product-table">
+        <table className="product-table__table">
+            <thead>
                 <tr>
                     <th>Name</th>
                     <th>Price</th>
@@ -11,7 +27,7 @@ const ProductList = ({ products, onEdit }) => {
                     <th>Category</th>
                     <th>Actions</th>
                 </tr>
-            </thread>
+            </thead>
 
         <tbody>
             {products.map((product) => (
@@ -20,13 +36,25 @@ const ProductList = ({ products, onEdit }) => {
                     <td>{product.price}</td>
                     <td>{product.stock}</td>
                     <td>{product.category}</td> 
-                    <td>
-                        <button onClick={() => onEdit(product)}>Edit</button>
+                    <td className="product-table__actions">
+                        <button
+                            className="product-table__edit-button"
+                            onClick={() => onEdit(product)}
+                        >
+                            Edit
+                        </button>
+
+                        <button className="product-table__edit-button "
+                            onClick={() => handleDelete(product.id)}
+                        >
+                            Delete
+                        </button>
                     </td>
                 </tr>
             ))}
         </tbody>
         </table>
+        </div>
     );
 };
 

@@ -1,4 +1,4 @@
-import { createProducts, getProducts, updateProducts } from "../services/product.service.js";
+import { createProducts, getProducts, updateProducts, deleteProducts } from "../services/product.service.js";
 
 
 export const createProductHandler = async (req, res) => {
@@ -27,6 +27,16 @@ export const updateProductHandler = async (req, res) => {
 
         const updated = await updateProducts(id, name, price, stock, category);
         res.status(200).json(updated);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+export const deleteProductHandler = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deleted = await deleteProducts(id);
+        res.status(200).json(deleted);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
