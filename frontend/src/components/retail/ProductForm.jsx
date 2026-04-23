@@ -13,9 +13,8 @@ const ProductForm = ({ onClose, onSuccess, initialData }) => {
   const [category, setCategory] = useState("");
 
 
-   const isEdit = Boolean(initialData); 
+   const isEdit = Boolean(initialData);
 
-  
     useEffect (() => {
       if (initialData) {
         setName(initialData.name || "");
