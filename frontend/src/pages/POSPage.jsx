@@ -11,7 +11,7 @@ const POS = () => {
     const [cart, setCart] = useState([]);
 
 
-    useEffect (() => {
+
         const fetchProducts = async () => {
             try {
                 const data = await getProducts();
@@ -20,9 +20,11 @@ const POS = () => {
                 console.error(err);
             }
         };
-
+    useEffect(() => {
         fetchProducts();
     }, []);
+
+  
 
 
     const handleClick = (product) => {
@@ -78,11 +80,14 @@ const decreaseQty = (id) => {
   };
 
   const handleCheckout = async () => {
+
+    // check if cart is empty
     if (cart.length === 0) {
       alert ("Cart is empty");
       return;
     }
 
+    // checkout cart
     try {
       const data = await checkout({
         cart,
@@ -90,6 +95,8 @@ const decreaseQty = (id) => {
       });
 
       setCart([]);
+
+      await fetchProducts();
 
       alert(`Checkout successful! Order ID: ${data.id}`);
 
