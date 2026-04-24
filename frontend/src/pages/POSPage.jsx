@@ -31,12 +31,28 @@ const POS = () => {
         setCart((prev) => { 
           const exists = prev.find((item) => item.id === product.id);
 
+                        // check if stock is 0 before adding to cart
+            if (product.stock === 0) {
+              alert('Out of stock');
+              return prev;
+            }
+
           if (exists) {
+            // check stock before increasing quantity
+            if (exists.quantity >= product.stock) {
+              alert('Not enough stock');
+              return prev;
+            }
+
+            // increase quantity
             return prev.map((item) =>
               item.id === product.id
                 ? { ...item, quantity: item.quantity + 1 }
                 : item
             );
+
+
+
           } else {
             return [...prev, { ...product, quantity: 1 }];
             
@@ -149,7 +165,9 @@ return (
 
         <div className="pos-cart__actions">
             <button className="pos-cart__button" onClick={() => decreaseQty(item.id)}>-</button>
-            <button className="pos-cart__button" onClick={() => handleClick(item)}>+</button>
+            <button className="pos-cart__button" onClick={() => handleClick(item)} disabled={item.quantity >= item.stock}>
+                +
+            </button>
             <button className="pos-cart__button pos-cart__button--remove" onClick={() => removeItem(item.id)}>x</button>
         </div>
 
