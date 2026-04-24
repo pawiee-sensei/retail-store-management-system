@@ -11,13 +11,19 @@ const POS = () => {
     const [cart, setCart] = useState([]);
     const [search, setSearch] = useState("");
     const [activeCategory, setActiveCategory] = useState("All");
+    const [toast, setToast] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+const showToast = (text, type = "error") => {
+    setToast({ text, type });
+  };
 
 const categories = [
   "All",
   ...new Set(products.map((p) => p.category))
 ];
 
-const filteredProducts = products.filter((p) => {
+  const filteredProducts = products.filter((p) => {
     const matchesCategory =
       activeCategory === "All" || p.category === activeCategory;
 
@@ -52,14 +58,14 @@ const filteredProducts = products.filter((p) => {
 
             // check if stock is 0 before adding to cart
             if (product.stock === 0) {
-              alert('Out of stock');
+              showToast('Out of stock');
               return prev;
             }
 
           if (exists) {
             // check stock before increasing quantity
             if (exists.quantity >= product.stock) {
-              alert('Not enough stock');
+              showToast('Not enough stock');
               return prev;
             }
             
@@ -116,11 +122,20 @@ const decreaseQty = (id) => {
 
   const handleCheckout = async () => {
 
-    // check if cart is empty
+    if (loading) return;
+
     if (cart.length === 0) {
-      alert ("Cart is empty");
+      showToast("Cart is empty");
       return;
     }
+
+    // check if cart is empty
+    if (cart.length === 0) {
+      showToast ("Cart is empty");
+      return;
+    }
+
+    setLoading(true);
 
     // checkout cart
     try {
@@ -133,14 +148,25 @@ const decreaseQty = (id) => {
 
       await fetchProducts();
 
-      alert(`Checkout successful! Order ID: ${data.id}`);
+      showToast(`Checkout successful!`, "success");
 
     }catch (err) {
       console.error(err);
-      alert(err.message);
-    }
+      showToast(err.message, "error");
+    }finally {
+        setLoading(false);
+      }
   };
 
+
+  useEffect(() => {
+    if (!toast) return;
+
+    const timer = setTimeout(() => 
+          setToast(null), 3000);
+
+    return () => clearTimeout(timer);
+  }, [toast]);
 
 
 return (
@@ -176,6 +202,25 @@ return (
           ))}
         </div>
       </div>
+
+      {toast && (
+        <div className={`pos-toast pos-toast--${toast.type}`}>
+          <div className="pos-toast__content">
+            <span className="pos-toast__label">
+              {toast.type === "success" ? "Success" : toast.type === "error" ? "Error" : "Notice"}
+            </span>
+            <span className="pos-toast__text">{toast.text}</span>
+          </div>
+          <button
+            type="button"
+            className="pos-toast__close"
+            onClick={() => setToast(null)}
+            aria-label="Close notification"
+          >
+            ×
+          </button>
+        </div>
+      )}
       
       {/* PRODUCTS GRID */}
       <div className="pos-grid">
@@ -208,7 +253,7 @@ return (
 
         <div className="pos-cart__actions">
             <button className="pos-cart__button" onClick={() => decreaseQty(item.id)}>-</button>
-            <button className="pos-cart__button" onClick={() => handleClick(item)} disabled={item.quantity >= item.stock}>
+            <button className="pos-cart__button" onClick={() => handleClick(item)} >
                 +
             </button>
             <button className="pos-cart__button pos-cart__button--remove" onClick={() => removeItem(item.id)}>x</button>
@@ -222,9 +267,9 @@ return (
       <button 
           className="pos-cart__checkout"
           onClick={handleCheckout}
-          disabled={cart.length === 0}
+          disabled={loading || cart.length === 0}
           >
-          Checkout
+         {loading ? "Processing..." : "Checkout"}
          
       </button>
 
