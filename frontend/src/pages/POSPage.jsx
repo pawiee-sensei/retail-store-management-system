@@ -9,6 +9,25 @@ import ProductCard from "../components/retail/ProductCard.jsx";
 const POS = () => {
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
+    const [search, setSearch] = useState("");
+    const [activeCategory, setActiveCategory] = useState("All");
+
+const categories = [
+  "All",
+  ...new Set(products.map((p) => p.category))
+];
+
+const filteredProducts = products.filter((p) => {
+    const matchesCategory =
+      activeCategory === "All" || p.category === activeCategory;
+
+    const matchesSearch =
+      p.name.toLowerCase().includes(search.toLowerCase()) ||
+      p.category.toLowerCase().includes(search.toLowerCase());
+
+    return matchesCategory && matchesSearch;
+  });
+
 
 
 
@@ -31,7 +50,7 @@ const POS = () => {
         setCart((prev) => { 
           const exists = prev.find((item) => item.id === product.id);
 
-                        // check if stock is 0 before adding to cart
+            // check if stock is 0 before adding to cart
             if (product.stock === 0) {
               alert('Out of stock');
               return prev;
@@ -43,7 +62,7 @@ const POS = () => {
               alert('Not enough stock');
               return prev;
             }
-
+            
             // increase quantity
             return prev.map((item) =>
               item.id === product.id
@@ -133,10 +152,34 @@ return (
         <p className="pos-page__eyebrow">Point Of Sale</p>
         <h1 className="pos-page__title">Products</h1>
       </div>
+
+      <div className="pos-toolbar">
+        <div className="pos-search-wrap">
+          <input
+            type="text"
+            className="pos-search"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
+        <div className="pos-categories">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              className={`pos-categories__button ${activeCategory === cat ? "pos-categories__button--active" : ""}`}
+              onClick={() => setActiveCategory(cat)}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      </div>
       
       {/* PRODUCTS GRID */}
       <div className="pos-grid">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
                 <ProductCard
                       key={product.id}
                       product={product}
